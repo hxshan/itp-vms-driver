@@ -119,7 +119,7 @@ useEffect(() => {
   <div className="lg:w-1/2 lg:ml-10 mr-4">
     <div className="flex flex-col items-start mt-4 mb-4">
       <div className="flex items-center">
-        <FaCalendarAlt className="text-gray-500 mr-2" />
+        <FaCalendarAlt className="text-gray-500 mr-2 h-5 w-5" />
         <h2 className="text-xl lg:text-2xl font-bold">Your Upcoming Trips</h2>
       </div>
       <div className="max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-200 mt-2">
@@ -133,7 +133,7 @@ useEffect(() => {
   <div className="lg:w-1/2 lg:ml-4 mt-4 lg:mt-0">
     <div className="flex flex-col items-start mt-4 mb-4">
       <div className="flex items-center">
-        <FaCheckCircle  className="text-gray-500 mr-2" />
+        <FaCheckCircle  className="text-gray-500 mr-2 h-5 w-5" />
         <h2 className="text-xl lg:text-2xl font-bold">Your Past Trips</h2>
       </div>
       <div className="max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-200 mt-2">
