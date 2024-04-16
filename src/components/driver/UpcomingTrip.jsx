@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FaPhone, FaCar, FaClock, FaTimes } from 'react-icons/fa'; // Import icons for customer, phone, car, clock, and close
+
+import { FaPhone, FaClock, FaTimes, FaCar, FaTruck, FaBus, FaShuttleVan } from 'react-icons/fa';
 
 import StartTripForm from './StartTripForm';
 
@@ -73,6 +74,22 @@ const TripCard = ({trip}) => {
   }
 };
 
+const getVehicleIcon = (category) => {
+  switch (category) {
+    case 'car':
+      return <FaCar className="text-gray-500 mr-2 h-7 w-7" />;
+    case 'truck':
+      return <FaTruck className="text-gray-500 mr-2 h-8 w-8" />;
+    case 'bus':
+      return <FaBus className="text-gray-500 mr-2 h-6 w-6" />;
+    case 'van':
+      return <FaShuttleVan className="text-gray-500 mr-2 h-8 w-8"  />;
+    case 'lorry':
+      return <FaTruck className="text-gray-500 mr-2 h-8 w-8" />;
+    default:
+      return <FaCar className="text-gray-500 mr-2 h-8 w-8" />;
+  }
+};
 
 
 
@@ -111,13 +128,13 @@ const TripCard = ({trip}) => {
       <div className="flex items-center mb-6">
         <p className="text-lg font-semibold mr-4">{trip.cusName}</p>
         <div className="flex items-center">
-          <FaPhone className="text-gray-500 mr-2" />
+          <FaPhone className="text-gray-500 mr-2 h-5 w-5" />
           <p>{trip.cusMobile}</p>
         </div>
       </div>
       <div className="mb-6">
         <div className="flex items-center mb-2">
-          <FaCar className="text-gray-500 mr-2" />
+        {getVehicleIcon(trip.vehicle.category)}
           <p>{trip.vehicle.vehicleRegister}</p>
         </div>
       </div>
@@ -130,7 +147,7 @@ const TripCard = ({trip}) => {
         <p className="text-lg">{trip.endPoint}</p>
       </div>
       <div className="flex items-center mb-6">
-        <FaClock className="text-gray-500 mr-2" />
+        <FaClock className="text-gray-500 mr-2 h-5 w-5" />
         <p>{trip.startTime}</p>
       </div>
       {showStartTripForm && (
