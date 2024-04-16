@@ -3,7 +3,7 @@ import useAxios from '../hooks/useAxios';
 import axios from '../api/axios';
 
 import { useLocation } from 'react-router-dom';
-import { EndTripForm, EmergencyReportForm } from '@/components/driver';
+import { EndTripForm, EmergencyReportForm } from '../components/driver';
 import {  FaTimes } from 'react-icons/fa';
 
 const TripPage = () => {
