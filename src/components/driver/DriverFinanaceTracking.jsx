@@ -4,9 +4,9 @@ import useAxios from '../../hooks/useAxios';
 import axios from '../../api/axios';
 import { useAuthContext } from "../../hooks/useAuthContext";
 import { jwtDecode } from 'jwt-decode';
-import { TripSummary } from '.';
+import DriverWagesTable from './DriverWagesTable';
 
-const PastTripTable = () => {
+const DriverFinanceTracking = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [data, error, loading, axiosFetch] = useAxios();
   const [currentPage, setCurrentPage] = useState(1);
@@ -36,10 +36,12 @@ const PastTripTable = () => {
       axiosFetch({
         axiosInstance: axios,
         method: "GET",
-        url: `/hire/past/${userID}`, 
+        url: `/expense/reimbursment/${userID}`, 
       });
     }
   }, [userID]);
+
+  console.log(data)
 
   const canEditTrip = (endDate, endTime) => {
     const isoDate = endDate;
@@ -53,16 +55,13 @@ const PastTripTable = () => {
     return differenceInMilliseconds < oneHourInMillis;
   };
 
-  const columns = ["Date", "Start Time", "End Time", "Start Location", "End Location","Status", "Fare", "Actions"];
+  const columns = ["Date", "Expense Category", "Reimbursment Amount", "Reimbursement Status", "End Location","Status", "Fare", "Actions"];
 
   const filteredData = data.filter((trip) =>
-  new Date(trip.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).toLowerCase().includes(searchTerm.toLowerCase()) ||
-  new Date(trip.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).toLowerCase().includes(searchTerm.toLowerCase()) ||
-  trip.startTime.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  trip.endTime.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  trip.startPoint.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  trip.endPoint.toLowerCase().includes(searchTerm.toLowerCase())  ||
-  trip.finalTotal.toString().includes(searchTerm.toLowerCase()) 
+  new Date(trip.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }).toLowerCase().includes(searchTerm.toLowerCase()) ||
+  trip.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  trip.reimbursementStatus.toLowerCase().includes(searchTerm.toLowerCase())  ||
+  trip.reimbursementAmount.toString().includes(searchTerm.toLowerCase()) 
 
 
   
@@ -77,13 +76,7 @@ const PastTripTable = () => {
     return <div>Error: {error}</div>;
   }
 
-  const handleViewSummary = (trip) => {
-    setSelectedTrip(trip); // Set the selected trip when "View Summary" button is clicked
-  };
-
-  const handleCloseSummary = () => {
-    setSelectedTrip(null); // Reset selectedTrip state when modal is closed
-  };
+  
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -119,8 +112,15 @@ const PastTripTable = () => {
   };
 
   return (
-    <div className="overflow-x-auto">
+    
+    <div >
+        <div className="">
+       <DriverWagesTable/>
+       </div>
+       <div className="overflow-x-auto text-center ">
+       <h3 className="text-2xl font-semibold ">Reimbursements</h3>
       <div className="flex flex-col md:flex-row justify-between mb-4">
+        
         <div className="mb-2 md:mb-0">
           <input
             type="text"
@@ -133,46 +133,37 @@ const PastTripTable = () => {
         </div>
         <ReactToPrint
           trigger={() => (
-            <button className="bg-gray-400 hover:bg-blue-600 text-white py-2 px-4 rounded shadow-md transition duration-300 ease-in-out mt-2 md:mt-0 md:ml-2">
-              Generate Past Trip Table
+            <button className="bg-blue-400 hover:bg-blue-600 text-white py-2 px-4 rounded shadow-md transition duration-300 ease-in-out mt-2 md:mt-0 md:ml-2">
+              Generate Reimbursements
             </button>
           )}
           content={() => componentRef.current}
         />
       </div>
-      <div className="overflow-x-auto">
+      <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
         <div ref={componentRef} className="print:border print:border-gray-800 print:border-4 print:p-8">
 
-          <table className="w-full divide-y divide-gray-200">
-            <thead className="bg-gray-400">
+          <table className="min-w-full divide-y divide-gray-400">
+            <thead className="bg-black">
             <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Time</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End Time</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Location</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End Location</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fare (Rs)</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider print:hidden">Actions</th>
+                <th className="px-6 py-3 border-r border-white text-center text-xs font-bold text-white uppercase tracking-wider"> Date</th>
+                <th className="px-6 py-3 border-r border-white text-center text-xs font-bold text-white uppercase tracking-wider">Category</th>
+                <th className="px-6 py-3 border-r border-white text-center text-xs font-bold text-white uppercase tracking-wider">Reimbursement Amount</th>
+                <th className="px-6 py-3 border-r border-white text-center text-xs font-bold text-white uppercase tracking-wider">Reimbursement Status</th>
+
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="border-t border-gray-300">
               {currentItems.length > 0 ? (
                 currentItems.map((trip, index) => (
                   <tr key={index}>
-                    <td className="px-6 py-4 whitespace-nowrap">{new Date(trip.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{new Date(trip.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{trip.startTime}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{trip.endTime}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{trip.startPoint.city}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{trip.endPoint}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{trip.hireStatus}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">{trip.finalTotal}</td>
-                    <td className="px-6 py-4 whitespace-nowrap print:hidden">
-                      
-                      <button onClick={() => handleViewSummary(trip)} className="bg-green-400 text-blackpy-1 px-2 rounded hover:bg-green-200">View Summary</button>
-                    </td>
+                    <td className="px-6 py-2 whitespace-nowrap border-r border-gray-200">{new Date(trip.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                    
+                    <td className="px-6 py-2 whitespace-nowrap border-r border-gray-200">{trip.category}</td>
+                    <td className="px-6 py-2 whitespace-nowrap border-r border-gray-200">{trip.reimbursementAmount}</td>
+                    <td className="px-6 py-2 whitespace-nowrap border-r border-gray-200">{trip.reimbursementStatus}</td>
+                    
+                    
                   </tr>
                 ))
               ) : (
@@ -184,12 +175,11 @@ const PastTripTable = () => {
           </table>
         </div>
       </div>
-      {selectedTrip && (
-        <TripSummary trip={selectedTrip} onClose={handleCloseSummary} />
-      )}
+      
       {renderPagination()}
+    </div>
     </div>
   );
 };
 
-export default PastTripTable;
+export default DriverFinanceTracking;

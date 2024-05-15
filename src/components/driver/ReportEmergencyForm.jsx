@@ -5,19 +5,22 @@ import { ReactToPrint } from 'react-to-print';
 
 const EmergencyReportForm = ({ trip }) => {
   const [emergencyDetails, setEmergencyDetails] = useState({
-    caseTitle: '',
-    timeOfIncident: new Date(),
-    driverID: trip.driver._id,
-    driverName: trip.driver.firstName,
-    driverLicenceNumber: trip.driver.licenceNumber,
-    licencePlate: trip.vehicle.vehicleRegister,
-    passengerCount: trip.passengerCount,
-    location: '',
-    incidentDescription: '',
-    hire: trip._id,
-    severity: ''
+        caseType:'',
+        caseTitle:'',
+        location:'',
+        timeOfIncident:  new Date(),
+        licencePlate:trip.vehicle.vehicleRegister,
+        driver:trip.driver._id,
+        hire: trip._id,
+        vehicle: trip.vehicle._id,
+        passengerCount:trip.passengerCount,
+        status: 'incomplete' ,
+        incidentDescription:'',
+        severity:''
+
   });
 
+        
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [emergencyData, emergencyError, emergencyLoading, emergencyAxiosFetch] = useAxios();
@@ -45,11 +48,13 @@ const EmergencyReportForm = ({ trip }) => {
       // Clear form fields on successful submission
       setEmergencyDetails({
         ...emergencyDetails,
+        caseTitle:'',
         location: '',
         incidentDescription: '',
         passengerCount: trip.passengerCount, // Reset passenger count to default
         severity:''
       });
+      console.log(emergencyDetails)
     } catch (error) {
       console.error("Error creating emergency report:", error);
       setErrorMessage("Failed to submit emergency report. Please try again later.");
@@ -73,6 +78,22 @@ const EmergencyReportForm = ({ trip }) => {
             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
             required
           />
+        </div>
+        <div>
+          <label htmlFor="caseType" className="block font-medium text-gray-700">Case Type</label>
+          <select
+            id="caseType"
+            name="caseType"
+            value={emergencyDetails.caseType}
+            onChange={handleChange}
+            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+            required
+          >
+            <option value="">Select Case Type</option>
+            <option value="accident">Accident</option>
+            <option value="emergency">Emergency</option>
+            <option value="other">Other</option>
+          </select>
         </div>
         <div>
           <label htmlFor="location" className="block font-medium text-gray-700">Location</label>

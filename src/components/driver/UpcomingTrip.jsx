@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { FaPhone, FaClock, FaTimes, FaCar, FaTruck, FaBus, FaShuttleVan } from 'react-icons/fa';
+import {FaCalendarAlt, FaPhone, FaClock, FaTimes, FaCar, FaTruck, FaBus, FaShuttleVan } from 'react-icons/fa';
 
 import StartTripForm from './StartTripForm';
 
@@ -44,7 +44,7 @@ const TripCard = ({trip}) => {
         return `Trip starts in ${differenceInMinutes} minute${differenceInMinutes !== 1 ? 's' : ''}`;
     } else if (differenceInMinutes < 1440) { // Less than 24 hours
         const hours = Math.floor(differenceInMinutes / 60);
-        return `Trip starts in ${hours} hour${hours !== 1 ? 's' : ''}`;
+        return `Trip starts in about ${hours} hour${hours !== 1 ? 's' : ''}`;
     } else {
         const days = Math.floor(differenceInMinutes / 1440);
         return `Trip starts in ${days} day${days !== 1 ? 's' : ''}`;
@@ -146,10 +146,15 @@ const getVehicleIcon = (category) => {
         <p className="text-gray-500 font-semibold">Destination</p>
         <p className="text-lg">{trip.endPoint}</p>
       </div>
+      
       <div className="flex items-center mb-6">
+        <FaCalendarAlt className="text-gray-500 mr-2 h-5 w-5" />
+        <p  className="mr-12">{new Date(trip.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+      
         <FaClock className="text-gray-500 mr-2 h-5 w-5" />
         <p>{trip.startTime}</p>
       </div>
+
       {showStartTripForm && (
         <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white p-8 rounded-lg shadow-lg relative">

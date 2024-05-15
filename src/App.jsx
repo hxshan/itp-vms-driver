@@ -8,6 +8,7 @@ function App() {
     <main>
       <Routes>
         <Route path="/login" element={<Login />} />
+        
         <Route path="/driver">
         <Route index={true} element={<DriverDashboard />} />
         <Route path="TripPage" element={<TripPage />} />

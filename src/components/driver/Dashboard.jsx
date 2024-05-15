@@ -46,34 +46,20 @@ useEffect(() => {
   }
 }, [userID]);
 
-  useEffect(() => {
-    if (tripData && tripData.length > 0) {
-      
-      const currentDate = new Date();
+useEffect(() => {
+  if (tripData && tripData.length > 0) {
+    const currentDate = new Date();
+    const upcoming = tripData.filter(trip => {
+      const isoDate = trip.startDate;
+      const convertedDate = isoDate.substring(0, 10);
+      const tripStartDateTime = new Date(`${convertedDate}T${trip.startTime}`);
+      return ((tripStartDateTime >= currentDate && (trip.hireStatus === "Active") )|| trip.hireStatus === "Ongoing");
+    });
+    setUpcomingTrips(upcoming);
+  }
+}, [tripData]);
 
-      console.log(currentDate)
-      
-      const upcoming = [];
-
-      
-
-      tripData.forEach(trip => {
-        
-        const isoDate = trip.startDate;
-        const convertedDate = isoDate.substring(0, 10);
-         const tripStartDateTime = new Date(convertedDate + 'T' + trip.startTime);
-       console.log(tripStartDateTime > currentDate, tripStartDateTime, currentDate )
-       console.log((trip.hireStatus === "Active" ||trip.hireStatus === "Ongoing"), trip.hireStatus)
-         if (tripStartDateTime > currentDate && (trip.hireStatus === "Active" ||trip.hireStatus === "Ongoing")) {
-          upcoming.push(trip);
-      } 
-      
-      });
-
-     
-      setUpcomingTrips(upcoming);
-    }
-  }, [tripData]);
+console.log(upcomingTrips)
 
   useEffect(() => {
     if (pasTripData && pasTripData.length > 0) {

@@ -13,6 +13,7 @@ const TripReceipt = ({ trip }) => {
   const [vehicleRates, Verror, Vloading, VaxiosFetch] = useAxios();
   const [updateResponse, updateError, updateLoading, updateAxiosFetch] = useAxios();
   const [incomesData,incomeserror,incomesloading, incomesaxiosFetch] = useAxios()
+  const [expensesData,expenseserror, expensesloading, expensesaxiosFetch] = useAxios()
   // Fetch vehicle rates when the component mounts
   useEffect(() => {
     VaxiosFetch({
@@ -87,7 +88,7 @@ const TripReceipt = ({ trip }) => {
     return timeDifference.trim(); // Trim any leading/trailing spaces
 };
 
-
+console.log(fare)
 
 
   const updatedTrip = {
@@ -132,6 +133,20 @@ const TripReceipt = ({ trip }) => {
         
         status: "Received",
       };
+      const driverWageData = {
+        date: new Date(),
+        vehicle: trip.vehicle._id,
+        recordedBy: trip.driver.firstName, // Assuming driver ID is available in trip object
+        tripId: trip._id,
+        category:"Driver Wages",
+        status: "Pending",
+        notes:"Wages to be paid for completed trip",
+        driverName:trip.driver._id,
+        wagepercentage:25,
+        tripAmount: fare,
+        totalEarning: 0.25*fare
+
+      };
 
       incomesaxiosFetch({
         axiosInstance:axios,
@@ -142,9 +157,19 @@ const TripReceipt = ({ trip }) => {
         
         }
       })
+
+      expensesaxiosFetch({
+        axiosInstance: axios,
+        method: 'POST',
+        url: '/expense/',
+        requestConfig: {
+          data: driverWageData
+          
+        }
+      });
     }
 
-    if (updateResponse  && incomesData ) {
+    if (updateResponse  && incomesData && expensesData ) {
       
       alert("successfully updated")
       navigate('/driver');

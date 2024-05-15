@@ -6,14 +6,14 @@ const MaintenanceForm = () => {
   const [vehicleData, vehicleError, vehicleLoading, vehicleAxiosFetch, vehicleUpdatedAxiosFetch] = useAxios();
   const [vehicleOptions, setVehicleOptions] = useState([]);
   const [formData, setFormData] = useState({
-    vehicleType: "",
+    category: "",
     vrvehicleRegister: "",
     vrissue: "",
   });
   const [status, setStatus] = useState(null);
   const [error, setError] = useState(null);
   const [formErrors, setFormErrors] = useState({
-    vehicleType: "",
+    category: "",
     vrvehicleRegister: "",
     vrissue: "",
   });
@@ -49,8 +49,8 @@ const MaintenanceForm = () => {
     let valid = true;
     const errors = {};
 
-    if (!formData.vehicleType) {
-      errors.vehicleType = "Please select a vehicle category";
+    if (!formData.category) {
+      errors.category = "Please select a vehicle category";
       valid = false;
     }
 
@@ -95,7 +95,7 @@ const MaintenanceForm = () => {
         
       }, 3000);
 
-      setFormData({ vehicleType: "", vrvehicleRegister: "", vrissue: "" });
+      setFormData({ category: "", vrvehicleRegister: "", vrissue: "" });
     } catch (error) {
       setError("Failed to submit maintenance request. Please try again later.");
     }
@@ -108,27 +108,28 @@ const MaintenanceForm = () => {
       {status && <p className="text-green-500 mb-4">{status}</p>}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="vehicleType" className="block mb-2 font-medium">
+          <label htmlFor="category" className="block mb-2 font-medium">
             Vehicle Category:
           </label>
           <select
-            id="vehicleType"
-            name="vehicleType"
-            value={formData.vehicleType}
+            id="category"
+            name="category"
+            value={formData.category}
             onChange={handleChange}
             className="w-full border-gray-300 rounded-md focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
          
           >
             <option value="">Select Vehicle Category</option>
-            {vehicleOptions.map((option) => (
-              <option key={option.value} value={option.label}>
-                {option.label}
-              </option>
-            ))}
+            <option value="car">Car</option>
+            <option value="van">Van</option>
+            <option value="lorry">Lorry</option>
+            <option value="truck">Truck</option>
+            <option value="bus">Bus</option>
           </select>
-          {formErrors.vehicleType && <p className="text-red-500">{formErrors.vehicleType}</p>}
+          {formErrors.category && <p className="text-red-500">{formErrors.category}</p>}
         </div>
-        {formData.vehicleType && (
+        {formData.category
+ && (
           <div className="mb-4">
             <label htmlFor="vehicleRegisterNumber" className="block mb-2 font-medium">
               Vehicle Register Number:
@@ -143,7 +144,7 @@ const MaintenanceForm = () => {
             >
               <option value="">Select Vehicle Register Number</option>
               {vehicleData.vehicles
-                .filter((vehicle) => vehicle.category === formData.vehicleType)
+                .filter((vehicle) => vehicle.category === formData.category)
                 .map((vehicle) => (
                   <option key={vehicle._id} value={vehicle.vehicleRegister}>
                     {vehicle.vehicleRegister}

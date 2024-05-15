@@ -8,6 +8,10 @@ import MaintenanceForm from "./MaintenanceForm";
 import EndTripForm from "./EndTripForm";
 import EmergencyReportForm from "./ReportEmergencyForm";
 import TripSummary from "./TripSummary";
+import UserProfile from "./UserProfile";
+import DriverExpenseForm from "./DriverExpenseForm";
+import DriverFinanceTracking from "./DriverFinanaceTracking";
+import DriverWagesTable from "./DriverWagesTable";
 
 export{
     TripCard,
@@ -19,6 +23,10 @@ export{
     MaintenanceForm,
     EndTripForm,
     EmergencyReportForm,
-    TripSummary
+    TripSummary,
+    UserProfile,
+    DriverExpenseForm,
+    DriverFinanceTracking,
+    DriverWagesTable
 
 }
