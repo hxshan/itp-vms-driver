@@ -30,7 +30,10 @@ useEffect(() => {
     tripAxiosFetch({
       axiosInstance: axios,
       method: "GET",
-      url: `/hire/driver/${userID}`, // Use userID variable dynamically
+      url: `/hire/driver/${userID}`,
+      headers:{
+        authorization:`Bearer ${user?.accessToken}`
+      } // Use userID variable dynamically
     });
   }
 }, [userID]);

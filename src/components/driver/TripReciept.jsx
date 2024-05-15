@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import useAxios from '../../hooks/useAxios';
 import axios from '../../api/axios';
-
+import { useAuthContext } from '../../hooks/useAuthContext';
 import { useNavigate } from "react-router-dom";
 
 const TripReceipt = ({ trip }) => {
   // Define state variables
   const navigate = useNavigate()
+  const {user}=useAuthContext()
   const [fare, setFare] = useState(0);
   const [paymentReceived, setPaymentReceived] = useState(false);
   const actualDistance = trip.finalOdometerReading - trip.intialOdometerReading;
@@ -155,7 +156,10 @@ console.log(fare)
         requestConfig:{
           data: incomeData
         
-        }
+        },
+        headers:{
+          authorization:`Bearer ${user?.accessToken}`
+        } // 
       })
 
       expensesaxiosFetch({
@@ -165,7 +169,10 @@ console.log(fare)
         requestConfig: {
           data: driverWageData
           
-        }
+        },
+        headers:{
+          authorization:`Bearer ${user?.accessToken}`
+        } // 
       });
     }
 
